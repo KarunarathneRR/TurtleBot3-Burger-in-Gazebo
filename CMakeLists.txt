@@ -28,8 +28,12 @@ project(my_simulations)
 
 find_package(ament_cmake REQUIRED)
 
-install(DIRECTORY launch worlds models
+install(DIRECTORY launch worlds models config maps
   DESTINATION share/${PROJECT_NAME}
 )
+
+install(PROGRAMS
+  scripts/nav2_benchmark.py
+  DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
