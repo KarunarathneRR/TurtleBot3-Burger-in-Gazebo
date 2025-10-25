@@ -1,0 +1,40 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build (catkin_make) - ROS1",
+      "type": "shell",
+      "command": "bash -lc 'source /opt/ros/<distro>/setup.bash && cd \"${workspaceFolder}\" && catkin_make'",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build (colcon) - ROS2",
+      "type": "shell",
+      "command": "bash -lc 'source /opt/ros/<distro>/setup.bash && cd \"${workspaceFolder}\" && colcon build --symlink-install'",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Source workspace (opens new terminal)",
+      "type": "shell",
+      "command": "bash -lc 'export TURTLEBOT3_MODEL=burger; source /opt/ros/<distro>/setup.bash; if [ -f \"${workspaceFolder}/devel/setup.bash\" ]; then source \"${workspaceFolder}/devel/setup.bash\"; elif [ -f \"${workspaceFolder}/install/setup.bash\" ]; then source \"${workspaceFolder}/install/setup.bash\"; fi; exec bash'",
+      "presentation": { "reveal": "always", "panel": "new" },
+      "problemMatcher": []
+    },
+    {
+      "label": "ROS1: Launch <pkg> <launch>",
+      "type": "shell",
+      "command": "bash -lc 'export TURTLEBOT3_MODEL=burger; source /opt/ros/<distro>/setup.bash; source \"${workspaceFolder}/devel/setup.bash\"; roslaunch <pkg> <launch>.launch'",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "ROS2: Launch <pkg> <launch>",
+      "type": "shell",
+      "command": "bash -lc 'export TURTLEBOT3_MODEL=burger; source /opt/ros/<distro>/setup.bash; source \"${workspaceFolder}/install/setup.bash\"; ros2 launch <pkg> <launch>.py'",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    }
+  ]
+}
