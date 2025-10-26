@@ -25,7 +25,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([FindPackageShare('ros_gz_sim'), 'launch', 'gz_sim.launch.py'])
         ]),
-        launch_arguments={'gz_args': world}.items()
+        launch_arguments={'gz_args': ['-r ', world]}.items()
     )
 
     spawn_tb3 = IncludeLaunchDescription(

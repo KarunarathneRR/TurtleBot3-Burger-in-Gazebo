@@ -7,7 +7,7 @@ import os
 def generate_launch_description():
     my_share = get_package_share_directory('my_simulations')
     nav2_share = get_package_share_directory('turtlebot3_navigation2')
-    map_yaml  = os.path.join(my_share, 'maps', 'maze_map.yaml')
+    map_yaml  = os.path.join(my_share, 'maps', 'map.yaml')
     params    = os.path.join(my_share, 'config', 'nav2_params.yaml')
 
     return LaunchDescription([
