@@ -1,0 +1,131 @@
+╔══════════════════════════════════════════════════════════════════╗
+║           TURTLEBOT3 MAZE NAVIGATION - QUICK START              ║
+║                     3 TERMINAL METHOD                            ║
+╚══════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────┐
+│  STEP 1: OPEN 3 TERMINAL WINDOWS (Ctrl+Alt+T three times)       │
+└──────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────┐
+│  STEP 2: IN EACH TERMINAL, FIRST RUN THESE 3 LINES:            │
+└──────────────────────────────────────────────────────────────────┘
+
+    export TURTLEBOT3_MODEL=burger
+    source /opt/ros/jazzy/setup.bash
+    source /home/shrinath/RIS-TurtleBot3-Autonomous-Navigation/install/setup.bash
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║                        TERMINAL 1                                ║
+║                    START GAZEBO FIRST                            ║
+╚══════════════════════════════════════════════════════════════════╝
+
+    METHOD 1 (Recommended - No Flickering):
+    ./launch_gazebo_no_flicker.sh
+
+    METHOD 2 (Standard):
+    ros2 launch my_simulations maze_world.launch.py
+
+    ✓ Wait for Gazebo window to open (may blink initially)
+    ✓ Wait for robot to appear in maze
+    ✓ DO NOT PROCEED until robot is visible!
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║                        TERMINAL 2                                ║
+║               START NAV2 (wait 15 seconds)                       ║
+╚══════════════════════════════════════════════════════════════════╝
+
+    ros2 launch my_simulations nav2_maze.launch.py
+
+    ✓ Many nodes will start
+    ✓ Wait for "All lifecycle nodes are active"
+    ✓ DO NOT PROCEED until you see this message!
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║                        TERMINAL 3                                ║
+║               START RVIZ (wait 10 seconds)                       ║
+╚══════════════════════════════════════════════════════════════════╝
+
+    rviz2
+
+    ✓ RViz window opens
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║                    IN RVIZ WINDOW                                ║
+╚══════════════════════════════════════════════════════════════════╝
+
+ 1. Set Fixed Frame to "map" (top left dropdown)
+
+ 2. Add displays:
+    - Click "Add" → Select "Map" → Topic: /map
+    - Click "Add" → Select "RobotModel"
+    - Click "Add" → Select "LaserScan" → Topic: /scan
+    - Click "Add" → Select "TF"
+
+ 3. Add Navigation 2 Panel:
+    - Click "Panels" menu → "Add New Panel" → "Navigation 2"
+
+ 4. Give Initial Pose (CRITICAL!):
+    - Click "2D Pose Estimate" button in toolbar
+    - Click on map near center (where robot is)
+    - Wait 5 seconds for green arrows to appear
+
+ 5. Set Navigation Goal:
+    - Click "Nav2 Goal" button in toolbar
+    - Click anywhere on white area of map
+    - Robot will navigate! ✓
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║                    SUCCESS INDICATORS                            ║
+╚══════════════════════════════════════════════════════════════════╝
+
+ ✓ Gazebo shows maze with robot
+ ✓ RViz shows map, robot, and red laser dots
+ ✓ Navigation panel shows "Ready" and "Converged"
+ ✓ Green path appears when goal is set
+ ✓ Robot moves in Gazebo
+ ✓ Robot reaches destination without hitting walls
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║                    TROUBLESHOOTING                               ║
+╚══════════════════════════════════════════════════════════════════╝
+
+ Problem: Gazebo window is blinking/flickering
+ → Use: ./launch_gazebo_no_flicker.sh
+ → Or set: export LIBGL_ALWAYS_SOFTWARE=1
+
+ Problem: "Package not found"
+ → You didn't source the workspace in that terminal!
+
+ Problem: Navigation shows "unknown"
+ → Gazebo or Nav2 not running. Check terminals 1 & 2!
+
+ Problem: RViz crashes
+ → Don't use config file, just run: rviz2
+
+ Problem: Robot passes through walls
+ → LaserScan not working. Check: ros2 topic echo /scan --once
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║                    VERIFICATION                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+ Open 4th terminal and run:
+
+    source /opt/ros/jazzy/setup.bash
+    source /home/shrinath/RIS-TurtleBot3-Autonomous-Navigation/install/setup.bash
+    ros2 node list | wc -l
+
+ Should show: 15+ nodes
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║              READ START_HERE.md FOR FULL GUIDE                   ║
+╚══════════════════════════════════════════════════════════════════╝

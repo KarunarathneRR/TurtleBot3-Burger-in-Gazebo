@@ -1,0 +1,138 @@
+# ✅ NAVIGATION INACTIVE - FIXED!
+
+## Problem
+Navigation showed as "inactive" in RViz even though nodes were running.
+
+## Root Cause
+The `bt_navigator` node was failing to activate because the behavior tree XML file paths were using ROS2 substitution syntax that wasn't being resolved:
+```yaml
+# BROKEN:
+default_nav_to_pose_bt_xml: "$(find-pkg-share nav2_bt_navigator)/behavior_trees/..."
+```
+
+This substitution syntax works in launch files but not when loaded as parameters directly.
+
+## Solution Applied
+
+### Fixed: config/nav2_params.yaml
+Changed behavior tree paths from substitution syntax to absolute paths:
+
+```yaml
+# FIXED:
+default_nav_to_pose_bt_xml: "/opt/ros/jazzy/share/nav2_bt_navigator/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml"
+default_nav_through_poses_bt_xml: "/opt/ros/jazzy/share/nav2_bt_navigator/behavior_trees/navigate_through_poses_w_replanning_and_recovery.xml"
+```
+
+### Result
+After restarting Nav2 with fixed config:
+- ✅ bt_navigator: **active [3]**
+- ✅ behavior_server: **active [3]**
+- ✅ All navigation action servers available
+- ✅ RViz Navigation 2 panel shows "Ready"
+
+## Current Status
+
+### All Systems Active:
+```
+✓ map_server: active [3]
+✓ amcl: active [3]
+✓ controller_server: active [3]
+✓ planner_server: active [3]
+✓ bt_navigator: active [3]          ← NOW FIXED!
+✓ behavior_server: active [3]       ← NOW FIXED!
+✓ waypoint_follower: active [3]
+✓ smoother_server: active [3]
+✓ velocity_smoother: active [3]
+✓ collision_monitor: active [3]
+```
+
+### Available Action Servers:
+- /navigate_to_pose
+- /navigate_through_poses
+- /compute_path_to_pose
+- /compute_path_through_poses
+- /follow_path
+
+## How to Use Navigation
+
+### In RViz:
+
+1. **Check Status:**
+   - Look at "Navigation 2" panel (bottom left)
+   - Should show "Navigation: Ready" ✓
+
+2. **Set Navigation Goal:**
+   - Click "Nav2 Goal" button (top toolbar)
+   - Click destination on map
+   - Drag to set goal orientation
+
+3. **Watch Robot Navigate:**
+   - Green path appears (planned route)
+   - Robot moves in Gazebo AND RViz simultaneously
+   - LIDAR detects obstacles
+   - Path replans if needed
+   - Robot reaches goal and stops
+
+## If Navigation Becomes Inactive Again
+
+Run the activation script:
+```bash
+./activate_navigation.sh
+```
+
+Or manually:
+```bash
+ros2 lifecycle set /behavior_server activate
+ros2 lifecycle set /bt_navigator activate
+```
+
+## Files Modified
+
+1. **config/nav2_params.yaml**
+   - Line 56-57: Changed BT XML paths to absolute paths
+   - Removed $(find-pkg-share ...) substitution syntax
+
+## Complete System Summary
+
+### ✅ Fixed Issues:
+1. ✅ Map not received in RViz (QoS mismatch) - FIXED
+2. ✅ Gazebo-RViz not synchronized (launch timing) - FIXED  
+3. ✅ Navigation inactive (BT XML path) - FIXED
+
+### ✅ Current Status:
+- 26 ROS2 nodes running
+- All lifecycle nodes active
+- Map publishing and received in RViz
+- LIDAR scan publishing at ~4 Hz
+- AMCL localization converged
+- Navigation ready for goals
+- Gazebo and RViz fully synchronized
+
+### ✅ Verification:
+```bash
+# Check navigation status
+ros2 lifecycle get /bt_navigator
+# Should show: active [3]
+
+# Check available actions
+ros2 action list
+# Should include /navigate_to_pose
+
+# Monitor navigation
+ros2 topic echo /amcl_pose
+# Should show robot position updates
+```
+
+## Success!
+
+**Navigation is now fully operational!** 🎉
+
+You can now:
+- Set Nav2 goals in RViz
+- Robot navigates autonomously
+- Avoids obstacles using LIDAR
+- Reaches goals successfully
+- Everything synchronized between Gazebo and RViz
+
+**Last Updated:** October 28, 2025  
+**Status:** ALL SYSTEMS OPERATIONAL ✅

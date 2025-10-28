@@ -1,0 +1,145 @@
+╔════════════════════════════════════════════════════════════╗
+║         TURTLEBOT3 NAVIGATION - COMPLETE GUIDE           ║
+║              FOLLOW THESE STEPS EXACTLY!                  ║
+╚════════════════════════════════════════════════════════════╝
+
+STEP 0: CLEAN START
+==================
+1. Close all terminal windows
+2. Close Gazebo and RViz if open
+3. Run these commands:
+   killall -9 gzserver gzclient rviz2 ros2
+   cd ~/RIS-TurtleBot3-Autonomous-Navigation
+   
+STEP 1: PREPARE WORKSPACE
+========================
+1. Build workspace:
+   cd ~/RIS-TurtleBot3-Autonomous-Navigation
+   colcon build --symlink-install
+
+2. Verify installation:
+   source /opt/ros/jazzy/setup.bash
+   source install/setup.bash
+   ros2 pkg list | grep my_simulations
+
+STEP 2: START SIMULATION (Method 1 - Automated)
+=============================================
+1. Run the automated script:
+   ./start_navigation.sh
+
+2. Wait for "✅ All systems ready!" message
+3. Keep this terminal open!
+
+--- OR ---
+
+STEP 2: START SIMULATION (Method 2 - Manual)
+=========================================
+Terminal 1 - Gazebo:
+------------------
+1. export TURTLEBOT3_MODEL=burger
+2. source /opt/ros/jazzy/setup.bash
+3. source ~/RIS-TurtleBot3-Autonomous-Navigation/install/setup.bash
+4. ./launch_gazebo_no_flicker.sh
+5. ✓ Wait for robot to appear in maze!
+
+Terminal 2 - Navigation:
+---------------------
+1. export TURTLEBOT3_MODEL=burger
+2. source /opt/ros/jazzy/setup.bash
+3. source ~/RIS-TurtleBot3-Autonomous-Navigation/install/setup.bash
+4. ros2 launch my_simulations nav2_maze.launch.py
+5. ✓ Wait for "All lifecycle nodes activated"!
+
+STEP 3: START RVIZ
+=================
+New Terminal:
+1. export TURTLEBOT3_MODEL=burger
+2. source /opt/ros/jazzy/setup.bash
+3. source ~/RIS-TurtleBot3-Autonomous-Navigation/install/setup.bash
+4. rviz2
+
+STEP 4: CONFIGURE RVIZ (CRITICAL!)
+===============================
+In RViz window, follow EXACTLY this order:
+
+1. Global Settings:
+   - Set "Fixed Frame" to "map" (top-left dropdown)
+
+2. Add Displays (Click "Add" button):
+   ┌─────────────────┬─────────────────┐
+   │ Display Type    │ Topic/Settings  │
+   ├─────────────────┼─────────────────┤
+   │ Map             │ Topic: /map     │
+   │ RobotModel      │ (default)       │
+   │ LaserScan       │ Topic: /scan    │
+   │ TF             │ (default)       │
+   │ Path           │ Topic: /plan    │
+   │ Path           │ Topic: /local_plan│
+   └─────────────────┴─────────────────┘
+
+3. Add Navigation Panel:
+   - Click "Panels" menu
+   - Select "Add New Panel"
+   - Choose "Navigation 2"
+
+STEP 5: INITIALIZE NAVIGATION
+==========================
+1. In RViz:
+   - Click "2D Pose Estimate" button
+   - Click EXACTLY where robot is in Gazebo
+   - Drag to set orientation (match Gazebo)
+   - Wait for green arrows
+
+2. Verify Status:
+   - Navigation panel should show "Ready"
+   - Green particles should appear around robot
+   - LaserScan should show red dots
+
+STEP 6: TEST NAVIGATION
+=====================
+1. In RViz:
+   - Click "Nav2 Goal" button
+   - Click anywhere in white area
+   - Drag to set final orientation
+   - Release mouse button
+
+2. Watch robot:
+   - Green path should appear
+   - Robot should move in Gazebo
+   - RViz position should match Gazebo
+
+VERIFICATION CHECKLIST
+====================
+✓ Gazebo shows moving robot
+✓ RViz shows:
+  - Map with walls
+  - Robot model
+  - Red laser dots
+  - Green navigation path
+  - Green localization particles
+✓ Navigation panel shows "Ready"
+✓ Robot avoids walls while moving
+✓ Robot position synced in both windows
+
+TROUBLESHOOTING
+==============
+Problem: "Unknown" in Navigation panel
+Fix: Restart using start_navigation.sh
+
+Problem: No laser scans
+Fix: In new terminal:
+    ros2 topic echo /scan --once
+
+Problem: Robot through walls
+Fix: Check transforms:
+    ros2 topic echo /tf --once
+
+Problem: No path appears
+Fix: Re-do "2D Pose Estimate"
+
+STOPPING EVERYTHING
+=================
+1. Press Ctrl+C in all terminals
+2. Close RViz and Gazebo windows
+3. Run: killall -9 gzserver gzclient rviz2 ros2
+

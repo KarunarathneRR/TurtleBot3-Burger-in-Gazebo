@@ -2,10 +2,10 @@
 
 This repository contains a Gazebo (ros_gz_sim) maze world, Nav2 configuration, and a small DQN trainer/runner for TurtleBot3 that uses ROS 2 and PyTorch.
 
-## � **HAVING ISSUES? Navigation shows "unknown" in RViz?**
-## → **Read [FIX_NAVIGATION.md](FIX_NAVIGATION.md) for the complete solution!**
+## 🎯 **→→→ READ [START_HERE.md](START_HERE.md) FOR COMPLETE INSTRUCTIONS! ←←←**
 
-## �🚀 **QUICK START: Read [RUN_PROJECT.md](RUN_PROJECT.md) for complete step-by-step instructions!**
+## 🚨 **HAVING ISSUES? Navigation shows "unknown" in RViz?**
+## → **Read [FIX_NAVIGATION.md](FIX_NAVIGATION.md) for the complete solution!**
 
 This README explains how to prepare the environment, build the workspace, run the simulation and Nav2, and train/run the DQN agent.
 
